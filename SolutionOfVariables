@@ -1,0 +1,68 @@
+import numpy as np
+import matplotlib.pyplot as plt
+t_0 = 0
+T_0 = 1.0
+
+dt= 0.1
+dt_exact = 0.005
+t_max = 100.0
+
+alpha = 0.2
+l = 0.2
+
+
+def f(t, T):
+    return -l * alpha * T
+
+def rk4_step(t_i,T_i ,dt, f):
+    k1 = f(t_i, T_i)
+    k2 = f(t_i + dt/2, T_i + k1*dt/2)
+    k3 = f(t_i + dt/2, T_i + k2*dt/2)
+    k4 = f(t_i + dt, T_i + k3*dt)
+    return T_i + (dt/6)*(k1 + 2*k2 + 2*k3 + k4)
+
+def T_exact(t_0, y_0, t):
+    return y_0 * np.exp(-l * alpha * (t - t_0))
+
+
+t = t_0  
+
+Ts_exact = []
+ts_exact = []
+
+
+while t <= t_max:
+    ts_exact.append(t)
+    Ts_exact.append(T_exact(t_0, T_0, t)) 
+    t += dt_exact
+
+Nx = 100
+
+L = np.pi / np.sqrt(l)
+x = np.linspace(0, L, Nx)
+X_spatial = np.sin(np.pi*x/L)
+
+ts = [t_0]
+Ts = [T_0]
+t = t_0
+T = T_0
+
+while t < t_max:
+    T = rk4_step(t, T, dt, f)
+    t += dt
+    ts.append(t)
+    Ts.append(T)
+
+U = np.outer(X_spatial, np.array(Ts))
+
+X_mesh, Time_mesh = np.meshgrid(x, ts)
+fig = plt.figure(figsize=(10, 10))
+
+ax = fig.add_subplot(projection='3d')
+surf = ax.plot_surface(X_mesh, Time_mesh, U.T, cmap='viridis', edgecolor='none')
+ax.set_xlabel('Space (x)')
+ax.set_ylabel('Time (t)')
+ax.set_zlabel('Temperature u(x,t)')
+ax.set_title('Heat Equation Mesh SOV')
+fig.colorbar(surf, label='Temperature')
+plt.show()
