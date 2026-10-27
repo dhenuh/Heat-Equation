@@ -1,2 +1,5 @@
 # MOL-RK-4-Heat-Equation
 Utilizing Method Of Lines framework and the RK-4 explicit solver to model the heat equation. This utilizes Von Neumann boundary conditions. It would be easier and better to solve this using an Implicit solver but programming an explicit solver gave me insights into the numerical method world. Pain scale: 9/10. Future additions would probably be the implicit solvers and hopefully Parametric Regression and Fonets (extremely improbable unless I make this my masters thesis) In a sense this is also FTCS but FTCS is euler and I used RK-4. FTCS does rely on MOL. In essence this is a modded FTCS RK-4 solver for the Heat PDE. 
+1. MOL.py: This is the actual implementation using RK-4 and MOL
+2. 2DHEQT: Is a heatmap made from RK-4
+3. Solution Of Variables: The most rigid yet the most accurate as it relies on mathematical logic to even exist. If we take seperation of variables we get two ODE's. If we discretize one (spatial) ODE to a sine to fit the drichlet boundary conditions then we can just make a map of multiplication using outerproduct. It was probably the more interesting one to implement. 
